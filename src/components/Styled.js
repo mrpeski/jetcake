@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-const Input = styled.input`
+const Input = styled.input.attrs(props => ({
+  type: props.type,
+  name: props.name
+}))`
   background: ${props => props.primary ? "palevioletred" : "white"};
   color: ${props => props.primary ? "white" : "palevioletred"};
   font-size: 1em;

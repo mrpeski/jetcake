@@ -1,7 +1,9 @@
 import * as React from 'react';
 import JetCake from '../components';
+import Service from '../network';
+import withToast from '../components/Toast';
 
-export default function Register(props){
+function Register(props){
 
     const[state, setState] = React.useState({
         photo: '',
@@ -14,13 +16,24 @@ export default function Register(props){
     });
 
     const handleSubmit = (e) => {
-
+        e.preventDefault();
+        Service.signUp(state)
+                .catch((err) => props.showToast(err.message));
     }
     const handleChange = (e) => {
-        setState({
-            [e.target.name]: e.target.value
-        });
+        let {name, value} = e.target;
+        setState((prevState) => ({
+            ...prevState,
+            [name]: value
+        }));
+        
     }
+
+    React.useEffect(() => {
+        console.group('Boxed')
+        console.log(state);
+        console.groupEnd()
+    })
 
     return (
         <form onSubmit={handleSubmit}>
@@ -38,3 +51,4 @@ export default function Register(props){
     );
 }
 
+export default withToast(Register);
