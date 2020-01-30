@@ -24,6 +24,40 @@ const Label = styled.label`
   font-weight: 800;
 `;
 
+const H1 = styled.h1`
+  font-size: 92px;
+  margin: 20px auto;
+  color: white; 
+  text-align: center ;
+`
+
+const p = styled.p`
+  margin: 20px auto;
+  color: white; 
+  text-align: center;
+  max-width: 560px;
+`
+
+const Fold = styled.div`
+  position: relative;
+  max-height: calc(100vh - 75px);
+  overflow: hidden;
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  flex-direction: column;
+`
+
+const Overlay = styled.div`
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(3px); 
+  text-align: center;
+  width:100%; 
+  height:100%; 
+  z-index: 2; 
+  position: absolute;
+`
+
 const Button = styled.button.attrs(props => ({
   disabled: props.isDisabled,
 }))`
@@ -74,6 +108,24 @@ const GlobalStyle = createGlobalStyle`
     opacity: 0.3 !important;
     cursor: not-allowed !important;
   } 
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6
+  }
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+  .isBtn {
+    text-align: center;
+    background: #ccc;
+  }
 `
 
-export { Input, Button, GlobalStyle, Label };
+export { Input, Button, GlobalStyle, Label, H1, p, Fold, Overlay };
