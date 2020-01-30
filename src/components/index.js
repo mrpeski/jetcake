@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Button } from './Styled';
+import { Input, Button, Label } from './Styled';
 
 const Nav = React.lazy(() => import('./TopNav'));
 const Hero = React.lazy(() => import('./Hero'));
@@ -15,4 +15,5 @@ export default {
         Layout: (props) => <Layout {...props} />,
         Input: (props) => <Input {...props} />,
         Button: (props) => <Button {...props} />,
+        Label: (props) => <Label {...props} />
 }

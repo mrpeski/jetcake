@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { NavLink as Link, withRouter } from 'react-router-dom';
 
 function TopNav(){
-    return <div className="">
+    return <div className="" style={{display: 'flex',
+        padding: 10,
+        justifyContent: 'space-evenly', backgroundColor: 'white'}}>
         <Link to='/'>Home</Link>
         <Link to='/profile'>Profile</Link>
         <Link to='/login'>Login</Link>

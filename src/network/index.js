@@ -27,17 +27,34 @@ class Service {
         });
     }
     static async signUp(payload) {
-        const exists = await Service.checkEmail(payload.email);
-        if(!exists){
-            db.collection("users").add(payload).then(function(docRef) {
-                console.log("Document written with ID: ", docRef.id);
-            })
-            .catch(function(error) {
-                console.error("Error adding document: ", error);
+        let photo = payload.photo;
+        delete payload.photo;
+
+        var promise = firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password);
+        // If there is any error stop the process.
+        promise.catch(function (error) {
+            var errorCode = error.code;
+            console.log(`GOT ERROR: ` + errorCode)
+            if (errorCode == 'auth/weak-password') return // password to weak. Minimal 6 characters
+            if (errorCode == 'auth/email-already-in-use') return // Return a email already in use error
             });
-        } else {
-            console.log('exists');
-        }
+
+            // When no errors create the account
+            promise.then(function () {
+                var userUid = firebase.auth().currentUser.uid;
+                var db = firebase.firestore();
+                db.collection('users').doc(userUid).set(payload)
+                Service.uploadPhoto(userUid, photo);
+            });
+    }
+
+    static async uploadPhoto(userUid, file) {
+        let storageRef = firebase.storage().ref();
+        let ref = storageRef.child(`${userUid}.jpg`);
+       
+        return ref.put(file).then(function(snapshot) {
+            console.log('Uploaded a blob or file!');
+        });
     }
 }
 
