@@ -1,7 +1,7 @@
 import { string, object } from 'yup'; 
 // for only what you need
 let profileSchema = object().shape({
-    photo: string().required().nullable(),
+    // photo: string().required().nullable(),
     phonenumber: string().required(),
     email: string().email().required(),
     password: string().required(),

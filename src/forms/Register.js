@@ -24,9 +24,11 @@ function Register(props){
     });
 
     const handleSubmit = (values) => {
-        if(!props.updateKey){
-            Service.signUp(values)
-                .catch((err) => props.showToast(err.message));
+        debugger;
+        if(!props.updateKey && state.photo){
+                values.photo = state.photo;
+                Service.signUp(values)
+                    .catch((err) => props.showToast(err.message));
         } else {
             Service.update(values, props.updateKey)
                 .catch((err) => props.showToast(err.message));
@@ -94,8 +96,9 @@ function Register(props){
                         !props.updateKey ? 
                         <>
                             <JetCake.Label for="photo">Photo</JetCake.Label>
-                            <Field type="file" name="photo" id="photo"  accept="image/*" />
-                            <ErrorMessage name="photo" component="div" /> 
+                            {/* <Field type="file" name="photo" id="photo"  accept="image/*" onChange={handleImage} /> */}
+                            <JetCake.Input type="file" name="photo" id="photo" onChange={handleImage} accept="image/*"/>
+                            {/* <ErrorMessage name="photo" component="div" />  */}
                         </> : null
                     }
                     
