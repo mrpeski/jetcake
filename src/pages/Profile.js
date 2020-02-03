@@ -60,9 +60,9 @@ export default function Profile(props){
                 <Forms.Register updateKey={updateKey} entity={{...profile.details, photo: profile.photo}}/>
             </JetCake.Modal> : null}
 
-            <div style={{ backgroundColor: '#ececec', display: 'flex', padding: '40px 0', minHeight: 'calc(100vh - 100px)'}}>
-                <div style={{ width: 800, margin: 'auto', display: 'flex'}}>
-                 <div>
+            <div className={'innerPage'}>
+                <div className={'innerPage__container'}>
+                 <div className={'innerPage__image-box'}>
                     { profile.photo ? 
                         <img src={profile.photo} alt="" style={{ maxWidth: 200}}/> 
                     : null }

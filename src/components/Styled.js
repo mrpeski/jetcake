@@ -25,27 +25,39 @@ const Label = styled.label`
 `;
 
 const H1 = styled.h1`
-  font-size: 92px;
+  font-size: 48px;
   margin: 20px auto;
   color: white; 
-  text-align: center ;
+  text-align: center;
+  padding: 20px 40px;
+  @media all and (min-width: 568px) {
+    font-size: 92px;
+    padding: 20px;
+  }
+  
 `
 
 const p = styled.p`
   margin: 20px auto;
   color: white; 
   text-align: center;
-  max-width: 560px;
+  padding: 20px 40px;
+  @media all and (min-width: 568px) {
+    padding: 20px;
+    max-width: 560px;
+  }
 `
 
 const Fold = styled.div`
   position: relative;
-  max-height: calc(100vh - 75px);
-  overflow: hidden;
   display: flex; 
   align-items: center; 
   justify-content: center; 
   flex-direction: column;
+  @media all and (min-width: 568px) {
+    max-height: calc(100vh - 75px);
+    overflow: hidden;
+  }
 `
 
 const Overlay = styled.div`
@@ -53,9 +65,15 @@ const Overlay = styled.div`
   backdrop-filter: blur(3px); 
   text-align: center;
   width:100%; 
-  height:100%; 
+  min-height: 100%;
+  top: 0;
+  padding: 20px;
   z-index: 2; 
   position: absolute;
+  @media all and (min-width: 568px) {
+    height:100%; 
+    overflow: hidden;
+  }
 `
 
 const Footer = styled.div`
@@ -63,7 +81,7 @@ const Footer = styled.div`
   text-align: center;
   color: #483939;
   padding: 20px;
-  min-height: 200px;
+  padding-top: 150px;
 `
 
 const Button = styled.button.attrs(props => ({
@@ -148,122 +166,15 @@ const GlobalStyle = createGlobalStyle`
     display: inline-block;
     margin: 30px
   }
-
-  .row {
-    margin-top: 0.5rem;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+  .hero_image {
+    z-index: 1;
+    max-height: calc(100vh - 75px);
   }
-  
-  .col {
-    flex: 1 1 8%;
-    margin: 0 0 0.5rem 0;
-    padding: 0.5em 10px;
-    box-sizing: border-box;
+  @media screen and (min-width: 568px) {
+      .hero_image {
+          min-width: 100%;
+      }
   }
-  
-  /* nested grids */
-  .row .row, .row.nested {
-    flex: 1 1 auto;
-    margin-top: -0.5em;
-  }
-  
-  /* full width grids */
-  .row.wide-fit {
-    margin-left: -10px;
-    margin-right: -10px;
-  }
-  
-  /* center grids */
-  .row.center {
-    justify-content: center;
-  }
-  
-  .center .col {
-    flex-grow: 0;
-    flex-shrink: 0;
-  }
-  
-  /* columns widths */
-  
-  .col-span-1 {
-    flex-basis: 8.3333%;
-  }
-  
-  .col-span-2 {
-    flex-basis: 16.6666%; 
-  }
-  
-  .col-span-3 {
-    flex-basis: 25%;
-  }
-  
-  .col-span-4 {
-    flex-basis: 33.3333%;
-  }
-  
-  .col-span-5 {
-    flex-basis: 41.6666%;
-  }
-  
-  .col-span-6 {
-    flex-basis: 50%;
-  }
-  
-  .col-span-7 {
-    flex-basis: 58.3333%;
-  }
-  
-  .col-span-8 {
-    flex-basis: 66.6666%;
-  }
-  
-  .col-span-9 {
-    flex-basis: 75%;
-  }
-  
-  .col-span-10 {
-    flex-basis: 83.3333%;
-  }
-  
-  .col-span-11 {
-    flex-basis: 91.6666%;
-  }
-  
-  .col-span-12 {
-    flex-basis: 100%;
-  }
-  
-  /* examples */
-  
-  .fixed-width {
-    flex: 0 0 500px;
-    background-color: rgba(255,0,0,0.1) !important;
-  }
-  
-  @media all and (max-width: 568px) {
-    .col-span-1,
-    .col-span-2,
-    .col-span-3,
-    .col-span-4,
-    .col-span-5 {
-      flex-basis: 50%;
-    }
-  
-    .col-span-6,
-    .col-span-7,
-    .col-span-8,
-    .col-span-9,
-    .col-span-10,
-    .col-span-11 {
-      flex-basis: 100%;
-    }
-  
-    .nested .col {
-      flex-basis: 100%;
-    }
-    
   }
 `
 

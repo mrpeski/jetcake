@@ -23,8 +23,8 @@ function Login(props){
         }}
       >
         {({ isSubmitting }) => (
-          <Form style={{width: 500, margin: 'auto', backgroundColor: 'white'}}>
-            <div style={{top: 0, background: 'rgb(234, 224, 224)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px'}}>
+          <Form className={'Form'}>
+            <div className={'Form__header'}>
                 <h3 style={{ fontWeight: 800, color: 'chocolate' }}>Login</h3>
             </div>
             <div style={{ padding: '20px', fontSize: 14 }}>
@@ -39,7 +39,7 @@ function Login(props){
                 <Field type="password" name="password" id="password" />
                 <ErrorMessage name="password" component="div" />
             </div>
-            <div style={{ background: 'rgb(234, 224, 224)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 20px'}}>
+            <div className={"Form__footer"}>
                 <JetCake.Button type="submit" primary isDisabled={isSubmitting}>Submit</JetCake.Button>
             </div>
           </Form>
