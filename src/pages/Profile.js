@@ -38,7 +38,7 @@ export default function Profile(props){
         }).catch((e) => {
             console.log(e)
         });
-    });
+    }, []);
 
     let { dob, email, phonenumber, sec_1, sec_2, sec_3 } = profile.details;
     let updateKey = window.localStorage.getItem('uid');
@@ -64,7 +64,7 @@ export default function Profile(props){
                 <div style={{ width: 800, margin: 'auto', display: 'flex'}}>
                  <div>
                     { profile.photo ? 
-                        <img src={profile.photo} alt={profile.email} style={{ maxWidth: 200}}/> 
+                        <img src={profile.photo} alt="" style={{ maxWidth: 200}}/> 
                     : null }
                     <JetCake.Button onClick={() => { let el = document.getElementById('photo'); el.click() }}>Change Photo</JetCake.Button>
                     <JetCake.Input type="file" name="photo" id="photo" onChange={handleImage} accept="image/*" style={{ display: 'none' }} />
