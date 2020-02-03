@@ -58,6 +58,14 @@ const Overlay = styled.div`
   position: absolute;
 `
 
+const Footer = styled.div`
+  background: beige;
+  text-align: center;
+  color: #483939;
+  padding: 20px;
+  min-height: 200px;
+`
+
 const Button = styled.button.attrs(props => ({
   disabled: props.isDisabled,
 }))`
@@ -83,6 +91,18 @@ const GlobalStyle = createGlobalStyle`
   a:hover, a.active {
     color: blue
   }
+  input {
+    display: block;
+    width: 100%;
+    padding: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    color: hsl(0, 0%, 33%);
+    background-color: hsl(0, 0%, 100%);
+    background-image: none;
+    border: 1px solid hsl(0, 0%, 80%);
+  }
   input:focus {
     outline: none;
     border-color: blue
@@ -104,7 +124,7 @@ const GlobalStyle = createGlobalStyle`
     border-left: 2px solid #d2681e;
     margin-bottom: 20px; color: black;
   }
-  button:disabled {
+  button:disabled, input:disabled {
     opacity: 0.3 !important;
     cursor: not-allowed !important;
   } 
@@ -125,7 +145,126 @@ const GlobalStyle = createGlobalStyle`
   .isBtn {
     text-align: center;
     background: #ccc;
+    display: inline-block;
+    margin: 30px
+  }
+
+  .row {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .col {
+    flex: 1 1 8%;
+    margin: 0 0 0.5rem 0;
+    padding: 0.5em 10px;
+    box-sizing: border-box;
+  }
+  
+  /* nested grids */
+  .row .row, .row.nested {
+    flex: 1 1 auto;
+    margin-top: -0.5em;
+  }
+  
+  /* full width grids */
+  .row.wide-fit {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  
+  /* center grids */
+  .row.center {
+    justify-content: center;
+  }
+  
+  .center .col {
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+  
+  /* columns widths */
+  
+  .col-span-1 {
+    flex-basis: 8.3333%;
+  }
+  
+  .col-span-2 {
+    flex-basis: 16.6666%; 
+  }
+  
+  .col-span-3 {
+    flex-basis: 25%;
+  }
+  
+  .col-span-4 {
+    flex-basis: 33.3333%;
+  }
+  
+  .col-span-5 {
+    flex-basis: 41.6666%;
+  }
+  
+  .col-span-6 {
+    flex-basis: 50%;
+  }
+  
+  .col-span-7 {
+    flex-basis: 58.3333%;
+  }
+  
+  .col-span-8 {
+    flex-basis: 66.6666%;
+  }
+  
+  .col-span-9 {
+    flex-basis: 75%;
+  }
+  
+  .col-span-10 {
+    flex-basis: 83.3333%;
+  }
+  
+  .col-span-11 {
+    flex-basis: 91.6666%;
+  }
+  
+  .col-span-12 {
+    flex-basis: 100%;
+  }
+  
+  /* examples */
+  
+  .fixed-width {
+    flex: 0 0 500px;
+    background-color: rgba(255,0,0,0.1) !important;
+  }
+  
+  @media all and (max-width: 568px) {
+    .col-span-1,
+    .col-span-2,
+    .col-span-3,
+    .col-span-4,
+    .col-span-5 {
+      flex-basis: 50%;
+    }
+  
+    .col-span-6,
+    .col-span-7,
+    .col-span-8,
+    .col-span-9,
+    .col-span-10,
+    .col-span-11 {
+      flex-basis: 100%;
+    }
+  
+    .nested .col {
+      flex-basis: 100%;
+    }
+    
   }
 `
 
-export { Input, Button, GlobalStyle, Label, H1, p, Fold, Overlay };
+export { Input, Button, GlobalStyle, Label, H1, p, Fold, Overlay, Footer };

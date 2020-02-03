@@ -23,7 +23,7 @@ function Auth() {
 }
 
 function TopNav(){
-    let uid = window.localStorage.getItem('uid');
+    // let uid = window.localStorage.getItem('uid');
     return <div className="" style={{display: 'flex',
         padding: 10,
         justifyContent: 'space-evenly', backgroundColor: 'white'}}>

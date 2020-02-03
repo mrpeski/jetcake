@@ -48,21 +48,48 @@ class Service {
         let photo = payload.photo;
         delete payload.photo;
 
-        var promise = firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password);
+        let { email, password } = payload;
+        let promise = firebase.auth().createUserWithEmailAndPassword(email, password);
         // If there is any error stop the process.
         promise.catch(function (error) {
             var errorCode = error.code;
             console.log(`GOT ERROR: ` + errorCode)
-            if (errorCode == 'auth/weak-password') return // password to weak. Minimal 6 characters
-            if (errorCode == 'auth/email-already-in-use') return // Return a email already in use error
+            if (errorCode === 'auth/weak-password') return
+            if (errorCode === 'auth/email-already-in-use') return 
             });
-            promise.then(function () {
-                var userUid = firebase.auth().currentUser.uid;
-                var db = firebase.firestore();
-                db.collection('users').doc(userUid).set(payload)
+        promise.then(function () {
+            var userUid = firebase.auth().currentUser.uid;
+            var db = firebase.firestore();
+            db.collection('users').doc(userUid).set(payload)
                 Service.uploadPhoto(userUid, photo);
+                Service.signIn(payload);
+                // debugger;
             });
     }
+
+    static async update(payload, updateKey) {
+        // let photo = payload.photo;
+        delete payload.photo;
+
+        let usersRef = db.collection('users').doc(updateKey);
+        var setWithMerge = usersRef.set(payload, { merge: true });
+        debugger;
+        setWithMerge.then((data) => {
+            window.localStorage.setItem('details', JSON.stringify(payload));
+            history.push('/profile');
+        }).finally((data) => {
+            console.log(data);
+        });
+    }
+
+    static async updatePhoto(userUid, photo) {
+        Service.uploadPhoto(userUid, photo).then(() => {
+            window.localStorage.removeItem('photo')
+            Service.fetchPhoto();
+            history.push('/profile');
+        });
+    }
+    
 
     static async uploadPhoto(userUid, file) {
         let storageRef = firebase.storage().ref();
@@ -75,20 +102,19 @@ class Service {
     }
 
     static async fetchDetails() {
-        var currentUser = firebase.auth().currentUser;
+        let currentUser = window.localStorage.getItem('uid');
         if (!currentUser) {
             return;
         }
         let local = window.localStorage.getItem('details');
         if(!local) {
-            let userUid = currentUser.uid;
+            let userUid = currentUser;
             var docRef = db.collection('users').doc(userUid);
             return docRef.get().then(function(doc) {
                 if (doc.exists) {
                     window.localStorage.setItem('details', JSON.stringify(doc.data()));
                     return doc.data();
                 } else {
-                    // doc.data() will be undefined in this case
                     console.log("No such document!");
                 }
             }).catch(function(error) {
@@ -96,19 +122,19 @@ class Service {
             });
         }
         else {
-            return Promise.resolve(local);
+            return Promise.resolve(JSON.parse(local));
         }
         
     }
 
-    static async fetchPhoto() {
-        var currentUser = firebase.auth().currentUser;
+    static async fetchPhoto(force) {
+        let currentUser = window.localStorage.getItem('uid');
         if (!currentUser) {
             return;
         }
         let local = window.localStorage.getItem('photo');
         if(!local) {
-            let userUid = currentUser.uid;
+            let userUid = currentUser;
             let storageRef = firebase.storage().ref();
             let imageRef = storageRef.child(`${userUid}.jpg`);
             return imageRef.getDownloadURL().then((url) => {
@@ -123,12 +149,7 @@ class Service {
 const handleSignIn = () => {
     var user = firebase.auth().currentUser;
     window.localStorage.setItem('uid', user.uid);
-    history.push('/');
-}
-
-const handleSignUp = (data) => {
-    console.log(data);
-    // redirect to profile page
+    history.push('/profile');
 }
 
 

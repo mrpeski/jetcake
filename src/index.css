@@ -1,1 +1,38 @@
 @import '../node_modules/reset-css/reset.css';
+
+#modal-root {
+    z-index: 200;
+    position: fixed;
+    top: 0;
+}
+
+.modal {
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(3px); 
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    z-index: 200;
+    padding: 30px 0;
+    transition: all 1s;
+}
+.profile-details {
+    padding: 0 20px
+}
+.profile-details p {
+    font-size: 32px;
+    font-weight: 200;
+    color: darkgray;
+    display: inline-block;
+    padding: 20px 0;
+    padding-right: 40px
+}
+
+.profile-details div:first-of-type p {
+    padding-top: 0 ;
+}
+
+.profile-details p:nth-child(2n){
+    color: #333;
+}
