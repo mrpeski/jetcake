@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image:  alpine:3.7
+      - image:  circleci/node:10-browsers
     steps:
       - checkout
       - run:
@@ -14,3 +14,8 @@ jobs:
           name: Code Has Arrived
           command: |
             ls -al
+            echo '^^^That is familiar'
+      - run:
+          name: Running in a Unique Container
+          command: |
+            node -v
