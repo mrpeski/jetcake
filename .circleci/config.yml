@@ -32,9 +32,9 @@ jobs:
       - image: alpine:3.7
     steps:
       - run:
-        name: Approval Complete
-        command: |
-          echo 'Do work once the approval has been completed'
+          name: Approval Complete
+          command: |
+            echo 'Do work once the approval has been completed'
 
 workflows:
   version: 2
