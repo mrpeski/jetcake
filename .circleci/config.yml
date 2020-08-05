@@ -3,41 +3,7 @@ exec_env: &exec_env
   working_directory: ~/repo
   docker:
     - image: circleci/node:14.6-browsers
-jobs:
-  Checkout-Repo:
-    <<: *exec_env
-    steps:
-      - restore-source-cache       # Optimization: Takes advantage of cached data
-      - checkout        # Put in current working directory
-      - clear-git-garbage
-      - save-source-cache
-  install:
-    <<: *exec_env
-    steps:
-      - restore-source-cache
-      - restore-node-cache
-      - install-packages
-      - save-node-cache
-  test:
-    <<: *exec_env
-    steps:
-      - restore-source-cache
-      - test-app
-  build:
-    <<: *exec_env
-    steps:
-      - restore-source-cache
-      - build-app
-      - persist-to-workspace
-
-
-workflows:
-  version: 2
-  Deployment:
-    jobs:
-      - Checkout-Repo
-
-
+    
 commands: # reusable commands with parameters
   restore-source-cache:
     steps:
@@ -89,3 +55,38 @@ commands: # reusable commands with parameters
           - build
           - package.json
           
+jobs:
+  Checkout-Repo:
+    <<: *exec_env
+    steps:
+      - restore-source-cache       # Optimization: Takes advantage of cached data
+      - checkout        # Put in current working directory
+      - clear-git-garbage
+      - save-source-cache
+  install:
+    <<: *exec_env
+    steps:
+      - restore-source-cache
+      - restore-node-cache
+      - install-packages
+      - save-node-cache
+  test:
+    <<: *exec_env
+    steps:
+      - restore-source-cache
+      - test-app
+  build:
+    <<: *exec_env
+    steps:
+      - restore-source-cache
+      - build-app
+      - persist-to-workspace
+
+
+workflows:
+  version: 2
+  Deployment:
+    jobs:
+      - Checkout-Repo
+
+
