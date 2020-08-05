@@ -6,12 +6,12 @@ common: &common
     - image: circleci/node:14.6-browsers
     
 commands: # a reusable command with parameters
-  Restore-Source-Cache:
+  restore-source-cache:
     steps:
       - restore_cache:
           keys: 
             - source-{{ .Branch }}-{{ .Revision }}
-  Restore-Node-Cache:
+  restore-node-cache:
     steps:
       - restore_cache:
           keys: 
@@ -22,11 +22,11 @@ jobs:
     <<: *common
     steps:
       # Optimization: Takes advantage of cached data
-      - Restore-Source-Cache
+      - restore-source-code
       - checkout        # Put in current working directory
       - run: 
           - name: "Manually Clear Git Garbage"
-          - command: git gc     #clear git barbage for smaller cache
+          - command: "git gc"     #clear git barbage for smaller cache
       - save_cache:
           key: source-{{ .Branch }}-{{ .Revision }}
           paths:
@@ -34,8 +34,8 @@ jobs:
   install:
     <<: *common
     steps:
-      - Restore-Source-Cache
-      - Restore-Node-Cache
+      - restore-source-code
+      - restore-node-code
       - run:
           name: "Install packages with yarn"
           command:  yarn install
@@ -53,7 +53,7 @@ jobs:
   build:
     <<: *common
     steps:
-      - Restore-Cache
+      - restore-source-code
       - run:
           name: 'Build app'
           command: npm run build
