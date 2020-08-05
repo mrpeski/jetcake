@@ -1,11 +1,47 @@
 version: 2.1
+    
+jobs:
+  Checkout-Repo:
+    <<: *exec_env
+    steps:
+      # Optimization: Takes advantage of cached data
+      - restore-source-cache
+      - checkout        # Put in current working directory
+      - clear-git-garbage
+      - save-source-cache
+  install:
+    <<: *exec_env
+    steps:
+      - restore-source-cache
+      - restore-node-cache
+      - install-packages
+      - save-node-cache
+  test:
+    <<: *common
+    steps:
+      - Restore-Cache
+      - run:
+          name: 'Run Tests'
+          command: npm run test
+  build:
+    <<: *exec_env
+    steps:
+      - restore-source-cache
+      - build-app
+      - persist-to-workspace
 
-common: &common
+
+workflows:
+  version: 2
+  Deployment:
+    jobs:
+      - Checkout-Repo
+
+exec_env: &exec_env
   working_directory: ~/repo
   docker:
     - image: circleci/node:14.6-browsers
-    
-commands: # a reusable command with parameters
+commands: # reusable commands with parameters
   restore-source-cache:
     steps:
       - restore_cache:
@@ -32,48 +68,22 @@ commands: # a reusable command with parameters
           key: source-{{ .Branch }}-{{ .Revision }}
           paths:
             - '.git'
-jobs:
-  Checkout-Repo:
-    <<: *common
+  install-packages:
     steps:
-      # Optimization: Takes advantage of cached data
-      - restore-source-cache
-      - checkout        # Put in current working directory
-      - clear-git-garbage
-      - save-source-cache
-  install:
-    <<: *common
+      run:
+        name: "Install packages with yarn"
+        command:  yarn install
+  save-node-cache:
     steps:
-      - restore-source-cache
-      - restore-node-cache
-      - run:
-          name: "Install packages with yarn"
-          command:  yarn install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-  test:
-    <<: *common
+  persist-workspace:
     steps:
-      - Restore-Cache
-      - run:
-          name: 'Run Tests'
-          command: npm run test
-  build:
-    <<: *common
-    steps:
-      - restore-source-cache
-      - build-app
       - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - build
-            - package.json
-
-
-workflows:
-  version: 2
-  Deployment:
-    jobs:
-      - Checkout-Repo
+        root: ~/repo
+        paths:
+          - build
+          - package.json
+          
