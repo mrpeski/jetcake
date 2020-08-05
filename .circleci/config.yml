@@ -25,8 +25,8 @@ jobs:
       - restore-source-code
       - checkout        # Put in current working directory
       - run: 
-          - name: "Manually Clear Git Garbage"
-          - command: "git gc"     #clear git barbage for smaller cache
+          name: "Manually Clear Git Garbage"
+          command: "git gc"     #clear git barbage for smaller cache
       - save_cache:
           key: source-{{ .Branch }}-{{ .Revision }}
           paths:
