@@ -1,57 +1,71 @@
 version: 2.1
+
+common: &common
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:14.6-browsers
+    
+commands: # a reusable command with parameters
+  Restore-Source-Cache:
+    steps:
+      - restore_cache:
+          keys: 
+            - source-{{ .Branch }}-{{ .Revision }}
+  Restore-Node-Cache:
+    steps:
+      - restore_cache:
+          keys: 
+            - dependency-cache-{{ checksum "package-lock.json" }}
+
 jobs:
-  Hello-World:
-    docker:
-      - image:  alpine:3.7
+  Checkout-Repo:
+    <<: *common
     steps:
-      - run:
-          name: The First Step
-          command: |
-            echo 'Hello Circle!'
-            echo 'This is the delivery pipeline'
-  I-Have-Code:
-    docker:
-      - image: alpine:3.7
+      # Optimization: Takes advantage of cached data
+      - Restore-Source-Cache
+      - checkout        # Put in current working directory
+      - run: 
+          - name: "Manually Clear Git Garbage"
+          - command: git gc     #clear git barbage for smaller cache
+      - save_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+  install:
+    <<: *common
     steps:
-      - checkout
+      - Restore-Source-Cache
+      - Restore-Node-Cache
       - run:
-          name: Code Has Arrived
-          command: |
-            ls -al
-            echo '^^^That is familiar'
-  Run-With-Node:
-    docker:
-      - image: circleci/node:10-browsers
+          name: "Install packages with yarn"
+          command:  yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+  test:
+    <<: *common
     steps:
+      - Restore-Cache
       - run:
-          name: Running in a Unique Container
-          command: |
-            node -v
-  Now-Complete:
-    docker:
-      - image: alpine:3.7
+          name: 'Run Tests'
+          command: npm run test
+  build:
+    <<: *common
     steps:
+      - Restore-Cache
       - run:
-          name: Approval Complete
-          command: |
-            echo 'Do work once the approval has been completed'
+          name: 'Build app'
+          command: npm run build
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - build
+            - package.json
+
 
 workflows:
   version: 2
-  Example_Workflow:
+  Deployment:
     jobs:
-      - Hello-World
-      - I-Have-Code:
-          requires:
-            - Hello-World
-      - Run-With-Node:
-          requires:
-            - Hello-World
-      - Hold-For-Approval:
-          type: approval
-          requires:
-            - Run-With-Node
-            - I-Have-Code
-      - Now-Complete:
-          requires:
-            - Hold-For-Approval
+      - Checkout-Repo
