@@ -40,54 +40,54 @@ workflows:
       - Checkout-Repo
 
 
-      commands: # reusable commands with parameters
-      restore-source-cache:
-        steps:
-          - restore_cache:
-              keys: 
-                - source-{{ .Branch }}-{{ .Revision }}
-      restore-node-cache:
-        steps:
-          - restore_cache:
-              keys: 
-                - dependency-cache-{{ checksum "package-lock.json" }}
-      clear-git-garbage:
-        steps:
-          - run: 
-              name: "Manually Clear Git Garbage"
-              command: "git gc"     #clear git barbage for smaller cache
-      build-app:
-        steps:
-          - run:
-              name: 'Build app'
-              command: npm run build
-      test-app:
-        steps:
-          - run:
-              name: 'Run Tests'
-              command: npm run test
-      save-source-cache:
-        steps:
-          - save_cache:
-              key: source-{{ .Branch }}-{{ .Revision }}
-              paths:
-                - '.git'
-      install-packages:
-        steps:
-         - run:
-            name: "Install packages with yarn"
-            command:  yarn install
-      save-node-cache:
-        steps:
-          - save_cache:
-              key: dependency-cache-{{ checksum "package.json" }}
-              paths:
-                - node_modules
-      persist-workspace:
-        steps:
-          - persist_to_workspace:
-              root: ~/repo
-              paths:
-                - build
-                - package.json
-              
+commands: # reusable commands with parameters
+  restore-source-cache:
+    steps:
+      - restore_cache:
+          keys: 
+            - source-{{ .Branch }}-{{ .Revision }}
+  restore-node-cache:
+    steps:
+      - restore_cache:
+          keys: 
+            - dependency-cache-{{ checksum "package-lock.json" }}
+  clear-git-garbage:
+    steps:
+      - run: 
+          name: "Manually Clear Git Garbage"
+          command: "git gc"     #clear git barbage for smaller cache
+  build-app:
+    steps:
+      - run:
+          name: 'Build app'
+          command: npm run build
+  test-app:
+    steps:
+      - run:
+          name: 'Run Tests'
+          command: npm run test
+  save-source-cache:
+    steps:
+      - save_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+  install-packages:
+    steps:
+     - run:
+        name: "Install packages with yarn"
+        command:  yarn install
+  save-node-cache:
+    steps:
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+  persist-workspace:
+    steps:
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - build
+            - package.json
+          
