@@ -22,7 +22,7 @@ jobs:
     <<: *common
     steps:
       # Optimization: Takes advantage of cached data
-      - restore-source-code
+      - restore-source-cache
       - checkout        # Put in current working directory
       - run: 
           name: "Manually Clear Git Garbage"
@@ -34,8 +34,8 @@ jobs:
   install:
     <<: *common
     steps:
-      - restore-source-code
-      - restore-node-code
+      - restore-source-cache
+      - restore-node-cache
       - run:
           name: "Install packages with yarn"
           command:  yarn install
@@ -53,7 +53,7 @@ jobs:
   build:
     <<: *common
     steps:
-      - restore-source-code
+      - restore-source-cache
       - run:
           name: 'Build app'
           command: npm run build
