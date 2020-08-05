@@ -3,7 +3,7 @@ exec_env: &exec_env
   working_directory: ~/repo
   docker:
     - image: circleci/node:14.6-browsers
-    
+
 commands: # reusable commands with parameters
   restore-source-cache:
     steps:
@@ -38,7 +38,7 @@ commands: # reusable commands with parameters
             - '.git'
   install-packages:
     steps:
-      run:
+     - run:
         name: "Install packages with yarn"
         command:  yarn install
   save-node-cache:
@@ -50,10 +50,10 @@ commands: # reusable commands with parameters
   persist-workspace:
     steps:
       - persist_to_workspace:
-        root: ~/repo
-        paths:
-          - build
-          - package.json
+          root: ~/repo
+          paths:
+            - build
+            - package.json
           
 jobs:
   Checkout-Repo:
