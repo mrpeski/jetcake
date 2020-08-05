@@ -7,28 +7,28 @@ jobs:
   Checkout-Repo:
     <<: *exec_env
     steps:
-      - _restore-source-cache       # Optimization: Takes advantage of cached data
+      - restore-source-cache       # Optimization: Takes advantage of cached data
       - checkout        # Put in current working directory
-      - _clear-git-garbage
-      - _save-source-cache
+      - clear-git-garbage
+      - save-source-cache
   install:
     <<: *exec_env
     steps:
-      - _restore-source-cache
-      - _restore-node-cache
-      - _install-packages
-      - _save-node-cache
+      - restore-source-cache
+      - restore-node-cache
+      - install-packages
+      - save-node-cache
   test:
     <<: *exec_env
     steps:
-      - _restore-source-cache
-      - _test-app
+      - restore-source-cache
+      - test-app
   build:
     <<: *exec_env
     steps:
-      - _restore-source-cache
-      - _build-app
-      - _persist-to-workspace
+      - restore-source-cache
+      - build-app
+      - persist-to-workspace
 
 
 workflows:
@@ -39,49 +39,49 @@ workflows:
 
 
 commands: # reusable commands with parameters
-  _restore-source-cache:
+  restore-source-cache:
     steps:
       - restore_cache:
           keys: 
             - source-{{ .Branch }}-{{ .Revision }}
-  _restore-node-cache:
+  restore-node-cache:
     steps:
       - restore_cache:
           keys: 
             - dependency-cache-{{ checksum "package-lock.json" }}
-  _clear-git-garbage:
+  clear-git-garbage:
     steps:
       - run: 
           name: "Manually Clear Git Garbage"
           command: "git gc"     #clear git barbage for smaller cache
-  _build-app:
+  build-app:
     steps:
       - run:
           name: 'Build app'
           command: npm run build
-  _test-app:
+  test-app:
     steps:
       - run:
           name: 'Run Tests'
           command: npm run test
-  _save-source-cache:
+  save-source-cache:
     steps:
       - save_cache:
           key: source-{{ .Branch }}-{{ .Revision }}
           paths:
             - '.git'
-  _install-packages:
+  install-packages:
     steps:
       run:
         name: "Install packages with yarn"
         command:  yarn install
-  _save-node-cache:
+  save-node-cache:
     steps:
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-  _persist-workspace:
+  persist-workspace:
     steps:
       - persist_to_workspace:
         root: ~/repo
