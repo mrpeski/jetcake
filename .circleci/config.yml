@@ -16,7 +16,22 @@ commands: # a reusable command with parameters
       - restore_cache:
           keys: 
             - dependency-cache-{{ checksum "package-lock.json" }}
-
+  clear-git-garbage:
+    steps:
+      - run: 
+          name: "Manually Clear Git Garbage"
+          command: "git gc"     #clear git barbage for smaller cache
+  build-app:
+    steps:
+      - run:
+          name: 'Build app'
+          command: npm run build
+  save-source-cache:
+    steps:
+      - save_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
 jobs:
   Checkout-Repo:
     <<: *common
@@ -24,13 +39,8 @@ jobs:
       # Optimization: Takes advantage of cached data
       - restore-source-cache
       - checkout        # Put in current working directory
-      - run: 
-          name: "Manually Clear Git Garbage"
-          command: "git gc"     #clear git barbage for smaller cache
-      - save_cache:
-          key: source-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
+      - clear-git-garbage
+      - save-source-cache
   install:
     <<: *common
     steps:
@@ -54,9 +64,7 @@ jobs:
     <<: *common
     steps:
       - restore-source-cache
-      - run:
-          name: 'Build app'
-          command: npm run build
+      - build-app
       - persist_to_workspace:
           root: ~/repo
           paths:
