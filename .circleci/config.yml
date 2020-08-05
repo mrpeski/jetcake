@@ -1,5 +1,8 @@
 version: 2.1
-
+exec_env: &exec_env
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:14.6-browsers
 jobs:
   Checkout-Repo:
     <<: *exec_env
@@ -34,10 +37,7 @@ workflows:
     jobs:
       - Checkout-Repo
 
-exec_env: &exec_env
-  working_directory: ~/repo
-  docker:
-    - image: circleci/node:14.6-browsers
+
 commands: # reusable commands with parameters
   _restore-source-cache:
     steps:
