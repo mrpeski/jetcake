@@ -45,7 +45,7 @@ workflows:
   Deployment:
     jobs:
       - Checkout-Repo
-      - Deploy-to-Heroku
+      - Deploy-to-Heroku:
           requires:
             - Checkout-Repo
           # filters:
