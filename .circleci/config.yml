@@ -46,9 +46,9 @@ workflows:
     jobs:
       - Checkout-Repo
       - Deploy-to-Heroku
-          filters:
-            branches:
-              only: master
+          # filters:
+          #   branches:
+          #     only: master
 
 
 commands: # reusable commands with parameters
