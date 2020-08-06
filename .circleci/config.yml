@@ -1,10 +1,23 @@
 version: 2.1
-  
+
 executors:
   node_14_6-browsers:
     working_directory: ~/repo
     docker:
       - image: circleci/node:14.6-browsers
+
+workflows:
+  version: 2
+
+  Deployment:
+    jobs:
+      - Checkout-Repo
+      - Deploy-to-Heroku:
+          requires:
+            - Checkout-Repo
+          filters:
+            branches:
+              only: master
 
 jobs:
   Checkout-Repo:
@@ -39,20 +52,6 @@ jobs:
           name: Deploy Master to Heroku
           command: |
             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
-
-
-workflows:
-  version: 2
-  Deployment:
-    jobs:
-      - Checkout-Repo
-      - Deploy-to-Heroku:
-          requires:
-            - Checkout-Repo
-          filters:
-            branches:
-              only: master
-
 
 commands: # reusable commands with parameters
   restore-source-cache:
