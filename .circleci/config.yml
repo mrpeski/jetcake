@@ -33,7 +33,6 @@ jobs:
   Deploy-to-Heroku:
     <<: *exec_env
     steps:
-      - Checkout-Repo
       - run:
           name: Deploy Master to Heroku
           command: |
