@@ -4,7 +4,6 @@ exec_env: &exec_env
   docker:
     - image: circleci/node:14.6-browsers
 
-
 jobs:
   Checkout-Repo:
     <<: *exec_env
@@ -16,21 +15,29 @@ jobs:
   install:
     <<: *exec_env
     steps:
-      - restore-source-cache
-      - restore-node-cache
+      - restore-source-cache 
+      - restore-node-cache 
       - install-packages
       - save-node-cache
   test:
     <<: *exec_env
     steps:
       - restore-source-cache
-      - test-app
+      - run-test
   build:
     <<: *exec_env
     steps:
       - restore-source-cache
-      - build-app
+      - run-build
       - persist-to-workspace
+  Deploy-to-Heroku:
+    <<: *exec_env
+     steps:
+      #  - Checkout-Repo
+       - run:
+           name: Deploy Master to Heroku
+           command: |
+             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
 
 
 workflows:
@@ -38,6 +45,10 @@ workflows:
   Deployment:
     jobs:
       - Checkout-Repo
+      - Deploy-to-Heroku
+          filters:
+            branches:
+              only: master
 
 
 commands: # reusable commands with parameters
@@ -56,12 +67,12 @@ commands: # reusable commands with parameters
       - run: 
           name: "Manually Clear Git Garbage"
           command: "git gc"     #clear git barbage for smaller cache
-  build-app:
+  run-build:
     steps:
       - run:
           name: 'Build app'
           command: npm run build
-  test-app:
+  run-test:
     steps:
       - run:
           name: 'Run Tests'
