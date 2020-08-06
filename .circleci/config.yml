@@ -1,37 +1,39 @@
 version: 2.1
-exec_env: &exec_env
-  working_directory: ~/repo
-  docker:
-    - image: circleci/node:14.6-browsers
+  
+executors:
+  node_14_6-browsers:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:14.6-browsers
 
 jobs:
   Checkout-Repo:
-    <<: *exec_env
+    executor: node_14_6-browsers
     steps:
       - restore-source-cache       # Optimization: Takes advantage of cached data
       - checkout        # Put in current working directory
       - clear-git-garbage
       - save-source-cache
   install:
-    <<: *exec_env
+    executor: node_14_6-browsers
     steps:
       - restore-source-cache 
       - restore-node-cache 
       - install-packages
       - save-node-cache
   test:
-    <<: *exec_env
+    executor: node_14_6-browsers
     steps:
       - restore-source-cache
       - run-test
   build:
-    <<: *exec_env
+    executor: node_14_6-browsers
     steps:
       - restore-source-cache
       - run-build
       - persist-to-workspace
   Deploy-to-Heroku:
-    <<: *exec_env
+    executor: node_14_6-browsers
     steps:
       - run:
           name: Deploy Master to Heroku
