@@ -33,6 +33,7 @@ jobs:
   Deploy-to-Heroku:
     <<: *exec_env
     steps:
+      - checkout
       - run:
           name: Deploy Master to Heroku
           command: |
@@ -45,6 +46,8 @@ workflows:
     jobs:
       - Checkout-Repo
       - Deploy-to-Heroku
+          requires:
+            - Checkout-Repo
           # filters:
           #   branches:
           #     only: master
