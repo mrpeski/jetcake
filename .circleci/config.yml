@@ -48,6 +48,10 @@ jobs:
   Deploy-to-Heroku:
     executor: node_14_6-browsers
     steps:
+      - restore-source-cache       # Optimization: Takes advantage of cached data
+      - checkout        # Put in current working directory
+      - clear-git-garbage
+      - save-source-cache 
       - run:
           name: Deploy Master to Heroku
           command: |
