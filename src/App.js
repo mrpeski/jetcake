@@ -19,7 +19,7 @@ function PrivateRoute({ component: Component, ...rest }) {
 function App() {
   return (
     <BrowserRouter>
-      <React.Suspense fallback={<div>Loading...</div>}>
+      <React.Suspense fallback={<div>Please wait...</div>}>
         <Route path="/" exact component={Pages.Home} />
         <Route path="/login" exact component={Pages.Login} />
         <Route path="/register" exact component={Pages.Register} />
