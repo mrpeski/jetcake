@@ -7,7 +7,7 @@ export default function Hero(props){
 
                 <JetCake.Overlay>
                     <JetCake.H1>
-                        Free cupcakes till 11:45
+                        HotCake. Free cupcakes till 11:45
                     </JetCake.H1>
                     <JetCake.p>
                     Contrary to popular belief, Lorem Ipsum is not simply random text. 
